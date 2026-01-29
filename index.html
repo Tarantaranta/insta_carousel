@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Carousel Oluşturucu</title>
+    <link rel="icon" href="data:,"">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Oswald:wght@200;300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Bebas+Neue&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Cinzel:wght@400;500;600;700;800;900&family=Abril+Fatface&family=Yeseva+One&family=Righteous&family=Questrial&family=Archivo+Black&family=Anton&family=Fjalla+One&family=Amatic+SC:wght@400;700&family=Dancing+Script:wght@400;500;600;700&family=Pacifico&family=Great+Vibes&family=Satisfy&family=Caveat:wght@400;500;600;700&family=Indie+Flower&family=Permanent+Marker&family=Lobster&family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Sans+3:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Epilogue:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@200;300;400;500;600;700;800&family=DM+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sora:wght@100;200;300;400;500;600;700;800&family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Tenor+Sans&family=Poiret+One&family=Julius+Sans+One&family=Forum&family=Marcellus&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Cardo:ital,wght@0,400;0,700;1,400&family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&family=Urbanist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Lexend:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Step 1: Carousel Count -->
+        <div id="step1" class="step active">
+            <h1>Instagram Carousel Oluşturucu</h1>
+            <div class="form-group">
+                <label>Kaç carousel oluşturmak istiyorsunuz? (Ana ekran hariç)</label>
+                <input type="number" id="carouselCount" min="1" max="10" value="5">
+            </div>
+            <button class="btn btn-primary" onclick="goToStep2()">İleri</button>
+        </div>
+
+        <!-- Step 2: Template Selection -->
+        <div id="step2" class="step">
+            <h2>Şablon Seçin</h2>
+            <div class="template-grid" id="templateGrid"></div>
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToStep1()">Geri</button>
+                <button class="btn btn-primary" onclick="goToStep3()">İleri</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Main Content -->
+        <div id="step3" class="step">
+            <h2>Ana Ekran İçeriği</h2>
+
+            <div class="form-group">
+                <label>Ana Ekran Görseli</label>
+                <div class="drop-zone" id="mainImageDrop">
+                    <p>Resmi buraya sürükleyin veya tıklayın</p>
+                    <input type="file" id="mainImage" accept="image/*" style="display:none">
+                </div>
+                <div id="mainImagePreview" class="image-preview"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Görsel Opaklığı (0-100%)</label>
+                <input type="range" id="mainImageOpacity" min="0" max="100" value="100" style="width: 100%;">
+                <span id="mainImageOpacityValue">100%</span>
+            </div>
+
+            <div class="form-group">
+                <label>Başlık</label>
+                <textarea id="mainTitle" placeholder="Başlık giriniz (Enter ile yeni satır)" rows="2"></textarea>
+                <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
+                    📝 Formatlama: **bold** *italik* ==vurgu== __altçizgi__ ++2:büyük++ --0.5:küçük++
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label>Alt Başlık</label>
+                <textarea id="mainSubtitle" placeholder="Alt başlık giriniz" rows="3"></textarea>
+                <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
+                    📝 Formatlama: **bold** *italik* ==vurgu== __altçizgi__ ++2:büyük++ --0.5:küçük++
+                </small>
+            </div>
+
+            <div class="text-controls">
+                <div class="form-group">
+                    <label>Başlık Font</label>
+                    <select id="mainTitleFont" class="font-preview" onchange="this.style.fontFamily=this.value">
+                        <!-- Fonts will be dynamically loaded by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Alt Başlık Font</label>
+                    <select id="mainSubtitleFont" class="font-preview" onchange="this.style.fontFamily=this.value">
+                        <!-- Fonts will be dynamically loaded by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Başlık Font Ağırlığı</label>
+                    <select id="mainTitleWeight">
+                        <option value="100">Thin (100)</option>
+                        <option value="200">Extra Light (200)</option>
+                        <option value="300">Light (300)</option>
+                        <option value="400">Regular (400)</option>
+                        <option value="500">Medium (500)</option>
+                        <option value="600">Semi Bold (600)</option>
+                        <option value="700" selected>Bold (700)</option>
+                        <option value="800">Extra Bold (800)</option>
+                        <option value="900">Black (900)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Alt Başlık Font Ağırlığı</label>
+                    <select id="mainSubtitleWeight">
+                        <option value="100">Thin (100)</option>
+                        <option value="200">Extra Light (200)</option>
+                        <option value="300">Light (300)</option>
+                        <option value="400" selected>Regular (400)</option>
+                        <option value="500">Medium (500)</option>
+                        <option value="600">Semi Bold (600)</option>
+                        <option value="700">Bold (700)</option>
+                        <option value="800">Extra Bold (800)</option>
+                        <option value="900">Black (900)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Başlık Boyutu</label>
+                    <input type="number" id="mainTitleSize" value="72" min="20" max="200">
+                </div>
+
+                <div class="form-group">
+                    <label>Alt Başlık Boyutu</label>
+                    <input type="number" id="mainSubtitleSize" value="36" min="16" max="100">
+                </div>
+
+                <div class="form-group">
+                    <label>Başlık Rengi</label>
+                    <input type="color" id="mainTitleColor" value="#FFFFFF">
+                </div>
+
+                <div class="form-group">
+                    <label>Alt Başlık Rengi</label>
+                    <input type="color" id="mainSubtitleColor" value="#FFFFFF">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="mainTitleBold"> Başlık Bold
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="mainTitleItalic"> Başlık İtalik
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="mainTitleShadow" checked> Yazı Gölgesi
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Başlık Arka Plan Rengi (opsiyonel)</label>
+                    <input type="color" id="mainTitleBgColor" value="#000000">
+                    <small style="display:block;margin-top:5px;font-size:12px;color:#999;">Kullanmak için renk seçin</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Ayırıcı/Çerçeve</label>
+                    <select id="mainSeparator">
+                        <option value="none">Yok</option>
+                        <option value="line-thin">İnce Çizgi</option>
+                        <option value="line-thick">Kalın Çizgi</option>
+                        <option value="line-double">Çift Çizgi</option>
+                        <option value="line-dotted">Noktalı</option>
+                        <option value="line-dashed">Kesikli</option>
+                        <option value="line-gradient">Gradient Çizgi</option>
+                        <option value="box-minimal">Minimal Kutu</option>
+                        <option value="box-rounded">Yuvarlak Kutu</option>
+                        <option value="box-shadow">Gölgeli Kutu</option>
+                        <option value="decorative">Dekoratif</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Ayırıcı/Çerçeve Rengi</label>
+                    <input type="color" id="mainSeparatorColor" value="#FFFFFF">
+                </div>
+
+                <div class="form-group">
+                    <label>Metin Hizalama</label>
+                    <select id="mainTextAlign">
+                        <option value="default">Şablon Varsayılanı</option>
+                        <option value="left">Sola Yaslı</option>
+                        <option value="center">Ortalı</option>
+                        <option value="right">Sağa Yaslı</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Paragraf Aralığı (Satır Yüksekliği)</label>
+                    <input type="number" id="mainLineHeight" value="1.2" min="1" max="3" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label>Paragraf Girinti (px)</label>
+                    <input type="number" id="mainTextIndent" value="0" min="0" max="100" step="5">
+                </div>
+
+                <div class="form-group">
+                    <label>3D Yazı Efekti</label>
+                    <select id="main3DEffect">
+                        <option value="none">Yok</option>
+                        <option value="depth">Derinlik</option>
+                        <option value="pop">Pop-out</option>
+                        <option value="layers">Katmanlı</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Gradient Yazı</label>
+                    <select id="mainGradient">
+                        <option value="none">Yok</option>
+                        <option value="sunset">Sunset</option>
+                        <option value="ocean">Ocean</option>
+                        <option value="fire">Fire</option>
+                        <option value="purple">Purple Dream</option>
+                        <option value="rainbow">Rainbow</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Glassmorphism Kutu</label>
+                    <select id="mainGlass">
+                        <option value="none">Yok</option>
+                        <option value="light">Açık</option>
+                        <option value="dark">Koyu</option>
+                        <option value="frosted">Buzlu</option>
+                        <option value="custom">Özel</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Glass Kutu Rengi</label>
+                    <input type="color" id="mainGlassColor" value="#FFFFFF">
+                </div>
+
+                <div class="form-group">
+                    <label>Glass Kutu Opaklık (0-100%)</label>
+                    <input type="range" id="mainGlassOpacity" min="0" max="100" value="20" style="width: 100%;">
+                    <span id="mainGlassOpacityValue">20%</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Glass Kutu Kenar Yumuşatma (px)</label>
+                    <input type="number" id="mainGlassBorderRadius" min="0" max="100" value="20" step="5">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="mainPageDots"> Sayfa Noktaları Göster
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="mainSwipeIndicator"> Kaydırma İşareti Göster
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Kaydırma Ok Rengi</label>
+                    <input type="color" id="mainSwipeColor" value="#FFFFFF">
+                </div>
+
+                <div class="form-group">
+                    <label>Kaydırma Ok Boyutu</label>
+                    <select id="mainSwipeSize">
+                        <option value="small">Küçük</option>
+                        <option value="medium" selected>Orta</option>
+                        <option value="large">Büyük</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Kaydırma Ok Şekli</label>
+                    <select id="mainSwipeStyle">
+                        <option value="arrow" selected>Ok</option>
+                        <option value="chevron">Chevron</option>
+                        <option value="line">Çizgi</option>
+                        <option value="circle">Daire Ok</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToStep2()">Geri</button>
+                <button class="btn btn-primary" onclick="goToStep4()">İleri</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Carousel Contents -->
+        <div id="step4" class="step">
+            <h2>Carousel İçerikleri</h2>
+            <div id="carouselForms"></div>
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToStep3()">Geri</button>
+                <button class="btn btn-primary" onclick="goToStep5()">İleri</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Background Image -->
+        <div id="step5" class="step">
+            <h2>Arka Plan Görseli</h2>
+
+            <div class="form-group">
+                <label>Arka Plan Görseli (Tüm carousel'ler için)</label>
+                <p class="info">Görsel boyutu: <span id="bgSizeInfo">6480x1350px</span></p>
+                <div class="drop-zone" id="bgImageDrop">
+                    <p>Resmi buraya sürükleyin veya tıklayın</p>
+                    <input type="file" id="bgImage" accept="image/*" style="display:none">
+                </div>
+                <div id="bgImagePreview" class="image-preview"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Arka Plan Opaklığı (0-100%)</label>
+                <input type="range" id="bgImageOpacity" min="0" max="100" value="100" style="width: 100%;">
+                <span id="bgImageOpacityValue">100%</span>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToStep4()">Geri</button>
+                <button class="btn btn-primary" onclick="generateCarousels()">Generate</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Preview & Download -->
+        <div id="step6" class="step">
+            <h2>Carousel'leriniz Hazır!</h2>
+            <div id="previewContainer" class="preview-container"></div>
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="goToStep5()">Geri</button>
+                <button class="btn btn-primary" onclick="downloadAll()">Tümünü İndir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
