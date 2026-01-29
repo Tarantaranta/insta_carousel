@@ -11,6 +11,170 @@ body {
     padding: 20px;
 }
 
+/* Landing Page Styles */
+.landing-page {
+    display: none;
+    min-height: 100vh;
+    padding: 40px 20px;
+    animation: fadeIn 0.8s ease-in;
+}
+
+.landing-page.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-content {
+    max-width: 1000px;
+    text-align: center;
+}
+
+.landing-header {
+    margin-bottom: 60px;
+}
+
+.landing-title {
+    font-size: 3.5em;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    animation: slideDown 0.8s ease-out;
+}
+
+.landing-subtitle {
+    font-size: 1.4em;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 400;
+    animation: slideDown 1s ease-out;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.feature {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 30px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.feature:nth-child(1) { animation-delay: 0.1s; }
+.feature:nth-child(2) { animation-delay: 0.2s; }
+.feature:nth-child(3) { animation-delay: 0.3s; }
+.feature:nth-child(4) { animation-delay: 0.4s; }
+
+.feature:hover {
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.feature-icon {
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    color: white;
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.btn-start {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 18px 60px;
+    font-size: 1.3em;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: fadeInUp 1s ease-out;
+    animation-delay: 0.5s;
+    animation-fill-mode: backwards;
+}
+
+.btn-start:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.btn-start:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.landing-footer {
+    margin-top: 40px;
+    animation: fadeIn 1.2s ease-out;
+}
+
+.landing-footer p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1em;
+    font-weight: 500;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design for Landing Page */
+@media (max-width: 768px) {
+    .landing-title {
+        font-size: 2.5em;
+    }
+
+    .landing-subtitle {
+        font-size: 1.1em;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .btn-start {
+        padding: 15px 40px;
+        font-size: 1.1em;
+    }
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;

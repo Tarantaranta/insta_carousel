@@ -11,7 +11,47 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <!-- Landing Page -->
+    <div id="landingPage" class="landing-page active">
+        <div class="landing-content">
+            <div class="landing-header">
+                <h1 class="landing-title">Instagram Carousel Oluşturucu</h1>
+                <p class="landing-subtitle">Profesyonel Instagram carousel'leri saniyeler içinde oluşturun</p>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🖼️</div>
+                    <h3>Görsel Yükle</h3>
+                    <p>Kendi görsellerinizi yükleyin veya arka plan ekleyin</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Şablon Seç</h3>
+                    <p>12+ hazır şablondan birini seçin</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">✨</div>
+                    <h3>Özelleştir</h3>
+                    <p>Font, renk, efekt ve daha fazlasını düzenleyin</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⬇️</div>
+                    <h3>İndir</h3>
+                    <p>Yüksek kalitede PNG olarak indirin</p>
+                </div>
+            </div>
+
+            <button class="btn-start" onclick="startApp()">Hemen Başla</button>
+
+            <div class="landing-footer">
+                <p>Ücretsiz • Kayıt Gerektirmez • Hızlı</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="container" id="appContainer" style="display: none;">
         <!-- Step 1: Carousel Count -->
         <div id="step1" class="step active">
             <h1>Instagram Carousel Oluşturucu</h1>

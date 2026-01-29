@@ -1,3 +1,12 @@
+// Landing page function
+function startApp() {
+    document.getElementById('landingPage').classList.remove('active');
+    document.getElementById('appContainer').style.display = 'block';
+    setTimeout(() => {
+        document.getElementById('landingPage').style.display = 'none';
+    }, 500);
+}
+
 // Global state
 let state = {
     carouselCount: 5,
