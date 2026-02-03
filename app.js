@@ -1,3 +1,16 @@
+// Utility: Debounce function for performance
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // Landing page function
 function startApp() {
     document.getElementById('landingPage').classList.remove('active');
@@ -162,6 +175,7 @@ function goToStep3() {
         return;
     }
     showStep('step3');
+    setupMainPreview();
 }
 
 function goToStep4() {
@@ -374,6 +388,10 @@ function createMiniTemplateSelector(carouselIndex) {
 function setupDragAndDrop() {
     setupDropZone('mainImageDrop', 'mainImage', 'mainImagePreview', (file) => {
         state.mainImage = file;
+        // Update preview if on step 3
+        if (document.getElementById('step3').classList.contains('active')) {
+            setTimeout(updateMainPreview, 100);
+        }
     });
 
     setupDropZone('bgImageDrop', 'bgImage', 'bgImagePreview', (file) => {
@@ -1012,6 +1030,20 @@ function createCarouselForms() {
             </div>
         `;
 
+        // Add preview container before appending form
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'carousel-preview-container';
+        previewContainer.innerHTML = `
+            <div class="carousel-preview-header">
+                <h4>Carousel ${i + 1} - Canlı Önizleme</h4>
+                <button class="preview-toggle-btn" onclick="toggleCarouselPreview(${i})">Gizle/Göster</button>
+            </div>
+            <div class="carousel-preview-canvas" id="carouselPreview${i}Container">
+                <canvas id="carouselPreview${i}Canvas" width="1080" height="1350"></canvas>
+            </div>
+        `;
+
+        container.appendChild(previewContainer);
         container.appendChild(form);
 
         // Add mini template selector
@@ -1022,6 +1054,8 @@ function createCarouselForms() {
         setupDropZone(`carousel${i}BgDrop`, `carousel${i}CustomBg`, `carousel${i}BgPreview`, (file) => {
             if (!state.carousels[i]) state.carousels[i] = {};
             state.carousels[i].customBg = file;
+            // Update preview after image loads
+            setTimeout(() => updateCarouselPreview(i), 100);
         });
 
         // If customBg already exists, show preview
@@ -1070,6 +1104,9 @@ function createCarouselForms() {
 
     // Add change listeners to Carousel 1 to sync settings to other carousels
     setupCarousel1Sync();
+
+    // Setup carousel preview listeners
+    setupCarouselPreviews();
 }
 
 // Sync Carousel 1 settings to other carousels
@@ -1850,6 +1887,20 @@ function wrapStyledText(ctx, parts, maxWidth, fontSize, fontFamily) {
     let currentWidth = 0;
 
     parts.forEach(part => {
+        // If this part has custom textAlign, it should be on its own line
+        if (part.textAlign) {
+            // First, save current line if it has content
+            if (currentLine.length > 0) {
+                lines.push({ styled: true, parts: currentLine });
+                currentLine = [];
+                currentWidth = 0;
+            }
+
+            // Add this aligned part on its own line
+            lines.push({ styled: true, parts: [part] });
+            return; // Don't process words for aligned parts
+        }
+
         const words = part.text.split(' ');
 
         words.forEach((word, wordIndex) => {
@@ -2393,4 +2444,299 @@ function downloadAll() {
             downloadCanvas(canvas, `carousel-${index}.png`);
         }, index * 500);
     });
+}
+
+// ========== LIVE PREVIEW FUNCTIONALITY ==========
+
+// Setup main preview with event listeners
+function setupMainPreview() {
+    const inputIds = [
+        'mainTitle', 'mainSubtitle', 'mainTitleFont', 'mainSubtitleFont',
+        'mainTitleWeight', 'mainSubtitleWeight', 'mainTitleSize', 'mainSubtitleSize',
+        'mainTitleColor', 'mainSubtitleColor', 'mainTitleBold', 'mainTitleItalic',
+        'mainTitleShadow', 'mainTitleBgColor', 'mainSeparator', 'mainSeparatorColor',
+        'mainTextAlign', 'mainImageOpacity', 'mainLineHeight', 'mainTextIndent',
+        'main3DEffect', 'mainGradient', 'mainGlass', 'mainGlassColor',
+        'mainGlassOpacity', 'mainGlassBorderRadius', 'mainPageDots', 'mainSwipeIndicator',
+        'mainSwipeColor', 'mainSwipeSize', 'mainSwipeStyle'
+    ];
+
+    const debouncedUpdate = debounce(updateMainPreview, 300);
+
+    inputIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            const eventType = element.type === 'checkbox' ? 'change' : 'input';
+            element.addEventListener(eventType, debouncedUpdate);
+        }
+    });
+
+    // Initial preview
+    updateMainPreview();
+}
+
+// Update main preview canvas
+async function updateMainPreview() {
+    if (!state.mainImage) {
+        // Show placeholder or message
+        const canvas = document.getElementById('mainPreviewCanvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#f5f5f5';
+        ctx.fillRect(0, 0, 1080, 1350);
+        ctx.fillStyle = '#999';
+        ctx.font = '24px Montserrat';
+        ctx.textAlign = 'center';
+        ctx.fillText('Lütfen görsel yükleyin', 540, 675);
+        return;
+    }
+
+    try {
+        const mainImageElement = await loadImage(state.mainImage);
+        const canvas = document.getElementById('mainPreviewCanvas');
+        if (!canvas) return;
+
+        canvas.width = 1080;
+        canvas.height = 1350;
+        const ctx = canvas.getContext('2d');
+
+        // Read current values from inputs
+        const currentContent = {
+            title: document.getElementById('mainTitle')?.value || '',
+            subtitle: document.getElementById('mainSubtitle')?.value || '',
+            titleFont: document.getElementById('mainTitleFont')?.value || 'Montserrat',
+            subtitleFont: document.getElementById('mainSubtitleFont')?.value || 'Montserrat',
+            titleWeight: document.getElementById('mainTitleWeight')?.value || '700',
+            subtitleWeight: document.getElementById('mainSubtitleWeight')?.value || '400',
+            titleSize: parseInt(document.getElementById('mainTitleSize')?.value || '72'),
+            subtitleSize: parseInt(document.getElementById('mainSubtitleSize')?.value || '36'),
+            titleBold: document.getElementById('mainTitleBold')?.checked || false,
+            titleItalic: document.getElementById('mainTitleItalic')?.checked || false,
+            titleColor: document.getElementById('mainTitleColor')?.value || '#FFFFFF',
+            subtitleColor: document.getElementById('mainSubtitleColor')?.value || '#FFFFFF',
+            titleShadow: document.getElementById('mainTitleShadow')?.checked || false,
+            titleBgColor: document.getElementById('mainTitleBgColor')?.value || '',
+            separator: document.getElementById('mainSeparator')?.value || 'none',
+            separatorColor: document.getElementById('mainSeparatorColor')?.value || '#FFFFFF',
+            textAlign: document.getElementById('mainTextAlign')?.value || 'default',
+            imageOpacity: parseInt(document.getElementById('mainImageOpacity')?.value || '100') / 100,
+            lineHeight: parseFloat(document.getElementById('mainLineHeight')?.value || '1.2'),
+            textIndent: parseInt(document.getElementById('mainTextIndent')?.value || '0'),
+            effect3D: document.getElementById('main3DEffect')?.value || 'none',
+            gradient: document.getElementById('mainGradient')?.value || 'none',
+            glass: document.getElementById('mainGlass')?.value || 'none',
+            glassColor: document.getElementById('mainGlassColor')?.value || '#FFFFFF',
+            glassOpacity: parseInt(document.getElementById('mainGlassOpacity')?.value || '20') / 100,
+            glassBorderRadius: parseInt(document.getElementById('mainGlassBorderRadius')?.value || '20'),
+            pageDots: document.getElementById('mainPageDots')?.checked || false,
+            swipeIndicator: document.getElementById('mainSwipeIndicator')?.checked || false,
+            swipeColor: document.getElementById('mainSwipeColor')?.value || '#FFFFFF',
+            swipeSize: document.getElementById('mainSwipeSize')?.value || 'medium',
+            swipeStyle: document.getElementById('mainSwipeStyle')?.value || 'arrow'
+        };
+
+        // Draw image with opacity
+        ctx.globalAlpha = currentContent.imageOpacity;
+        drawImageCover(ctx, mainImageElement, 0, 0, 1080, 1350);
+        ctx.globalAlpha = 1;
+
+        // Draw text
+        const template = templates[state.selectedTemplate];
+        const titleStyle = currentContent.textAlign && currentContent.textAlign !== 'default'
+            ? { ...template.titleStyle, textAlign: currentContent.textAlign }
+            : template.titleStyle;
+        const subtitleStyle = currentContent.textAlign && currentContent.textAlign !== 'default'
+            ? { ...template.subtitleStyle, textAlign: currentContent.textAlign }
+            : template.subtitleStyle;
+
+        const textInfo = drawText(ctx, currentContent.title, titleStyle,
+            currentContent.titleSize, currentContent.titleFont,
+            currentContent.titleBold, currentContent.titleItalic,
+            currentContent.titleColor, currentContent.titleShadow,
+            currentContent.titleBgColor, true, currentContent.titleWeight,
+            currentContent.lineHeight, currentContent.textIndent,
+            currentContent.effect3D, currentContent.gradient, currentContent.glass,
+            currentContent.glassColor, currentContent.glassOpacity, currentContent.glassBorderRadius);
+
+        // Draw separator
+        if (currentContent.separator && currentContent.separator !== 'none' && textInfo) {
+            drawSeparator(ctx, currentContent.separator, textInfo, template.titleStyle, currentContent.separatorColor);
+        }
+
+        drawText(ctx, currentContent.subtitle, subtitleStyle,
+            currentContent.subtitleSize, currentContent.subtitleFont,
+            false, false, currentContent.subtitleColor, currentContent.titleShadow, '', false, currentContent.subtitleWeight,
+            currentContent.lineHeight, currentContent.textIndent,
+            'none', currentContent.gradient, 'none');
+
+        // Draw page dots if enabled
+        if (currentContent.pageDots) {
+            drawPageDots(ctx, 0, state.carouselCount + 1);
+        }
+
+        // Draw swipe indicator if enabled
+        if (currentContent.swipeIndicator) {
+            drawSwipeIndicator(ctx, currentContent.swipeColor, currentContent.swipeSize, currentContent.swipeStyle);
+        }
+    } catch (error) {
+        console.error('Preview update error:', error);
+    }
+}
+
+// Setup carousel preview listeners
+function setupCarouselPreviews() {
+    for (let i = 0; i < state.carouselCount; i++) {
+        const inputIds = [
+            `carousel${i}Title`, `carousel${i}Content`, `carousel${i}TitleFont`, `carousel${i}ContentFont`,
+            `carousel${i}TitleWeight`, `carousel${i}ContentWeight`, `carousel${i}TitleSize`, `carousel${i}ContentSize`,
+            `carousel${i}TitleColor`, `carousel${i}ContentColor`, `carousel${i}TitleBold`, `carousel${i}TitleItalic`,
+            `carousel${i}TitleShadow`, `carousel${i}TitleBgColor`, `carousel${i}Separator`, `carousel${i}SeparatorColor`,
+            `carousel${i}TextAlign`, `carousel${i}LineHeight`, `carousel${i}TextIndent`,
+            `carousel${i}3DEffect`, `carousel${i}Gradient`, `carousel${i}Glass`, `carousel${i}GlassColor`,
+            `carousel${i}GlassOpacity`, `carousel${i}GlassBorderRadius`, `carousel${i}PageDots`, `carousel${i}SwipeIndicator`,
+            `carousel${i}SwipeColor`, `carousel${i}SwipeSize`, `carousel${i}SwipeStyle`, `carousel${i}CustomBgOpacity`,
+            `carousel${i}Template`
+        ];
+
+        const debouncedUpdate = debounce(() => updateCarouselPreview(i), 300);
+
+        inputIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                const eventType = element.type === 'checkbox' ? 'change' : 'input';
+                element.addEventListener(eventType, debouncedUpdate);
+            }
+        });
+
+        // Initial preview
+        updateCarouselPreview(i);
+    }
+}
+
+// Update carousel preview
+async function updateCarouselPreview(index) {
+    const canvas = document.getElementById(`carouselPreview${index}Canvas`);
+    if (!canvas) return;
+
+    canvas.width = 1080;
+    canvas.height = 1350;
+    const ctx = canvas.getContext('2d');
+
+    try {
+        // Get carousel data from inputs
+        const carouselData = {
+            title: document.getElementById(`carousel${index}Title`)?.value || '',
+            content: document.getElementById(`carousel${index}Content`)?.value || '',
+            titleFont: document.getElementById(`carousel${index}TitleFont`)?.value || 'Montserrat',
+            contentFont: document.getElementById(`carousel${index}ContentFont`)?.value || 'Montserrat',
+            titleWeight: document.getElementById(`carousel${index}TitleWeight`)?.value || '700',
+            contentWeight: document.getElementById(`carousel${index}ContentWeight`)?.value || '400',
+            titleSize: parseInt(document.getElementById(`carousel${index}TitleSize`)?.value || '48'),
+            contentSize: parseInt(document.getElementById(`carousel${index}ContentSize`)?.value || '24'),
+            titleBold: document.getElementById(`carousel${index}TitleBold`)?.checked || false,
+            titleItalic: document.getElementById(`carousel${index}TitleItalic`)?.checked || false,
+            titleColor: document.getElementById(`carousel${index}TitleColor`)?.value || '#FFFFFF',
+            contentColor: document.getElementById(`carousel${index}ContentColor`)?.value || '#FFFFFF',
+            titleShadow: document.getElementById(`carousel${index}TitleShadow`)?.checked || false,
+            titleBgColor: document.getElementById(`carousel${index}TitleBgColor`)?.value || '',
+            separator: document.getElementById(`carousel${index}Separator`)?.value || 'none',
+            separatorColor: document.getElementById(`carousel${index}SeparatorColor`)?.value || '#FFFFFF',
+            textAlign: document.getElementById(`carousel${index}TextAlign`)?.value || 'default',
+            lineHeight: parseFloat(document.getElementById(`carousel${index}LineHeight`)?.value || '1.2'),
+            textIndent: parseInt(document.getElementById(`carousel${index}TextIndent`)?.value || '0'),
+            effect3D: document.getElementById(`carousel${index}3DEffect`)?.value || 'none',
+            gradient: document.getElementById(`carousel${index}Gradient`)?.value || 'none',
+            glass: document.getElementById(`carousel${index}Glass`)?.value || 'none',
+            glassColor: document.getElementById(`carousel${index}GlassColor`)?.value || '#FFFFFF',
+            glassOpacity: parseInt(document.getElementById(`carousel${index}GlassOpacity`)?.value || '20') / 100,
+            glassBorderRadius: parseInt(document.getElementById(`carousel${index}GlassBorderRadius`)?.value || '20'),
+            pageDots: document.getElementById(`carousel${index}PageDots`)?.checked || false,
+            swipeIndicator: document.getElementById(`carousel${index}SwipeIndicator`)?.checked || false,
+            swipeColor: document.getElementById(`carousel${index}SwipeColor`)?.value || '#FFFFFF',
+            swipeSize: document.getElementById(`carousel${index}SwipeSize`)?.value || 'medium',
+            swipeStyle: document.getElementById(`carousel${index}SwipeStyle`)?.value || 'arrow',
+            customBgOpacity: parseInt(document.getElementById(`carousel${index}CustomBgOpacity`)?.value || '100') / 100,
+            template: parseInt(document.getElementById(`carousel${index}Template`)?.value || state.selectedTemplate)
+        };
+
+        // Draw background (from custom bg if exists, or from state.bgImage if exists)
+        const customBg = state.carousels[index]?.customBg;
+        if (customBg) {
+            const bgImageElement = await loadImage(customBg);
+            ctx.globalAlpha = carouselData.customBgOpacity;
+            drawImageCover(ctx, bgImageElement, 0, 0, 1080, 1350);
+            ctx.globalAlpha = 1;
+        } else if (state.bgImage) {
+            const bgImageElement = await loadImage(state.bgImage);
+            const sliceX = index * 1080;
+            ctx.globalAlpha = state.bgImageOpacity || 1;
+            ctx.drawImage(
+                bgImageElement,
+                sliceX, 0, 1080, 1350,
+                0, 0, 1080, 1350
+            );
+            ctx.globalAlpha = 1;
+        } else {
+            // No background - draw placeholder
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, 1080, 1350);
+        }
+
+        // Draw text
+        const template = templates[carouselData.template];
+        const titleStyle = carouselData.textAlign && carouselData.textAlign !== 'default'
+            ? { ...template.titleStyle, textAlign: carouselData.textAlign }
+            : template.titleStyle;
+        const subtitleStyle = carouselData.textAlign && carouselData.textAlign !== 'default'
+            ? { ...template.subtitleStyle, textAlign: carouselData.textAlign }
+            : template.subtitleStyle;
+
+        const textInfo = drawText(ctx, carouselData.title, titleStyle,
+            carouselData.titleSize, carouselData.titleFont,
+            carouselData.titleBold, carouselData.titleItalic,
+            carouselData.titleColor, carouselData.titleShadow,
+            carouselData.titleBgColor, true, carouselData.titleWeight,
+            carouselData.lineHeight, carouselData.textIndent,
+            carouselData.effect3D, carouselData.gradient, carouselData.glass,
+            carouselData.glassColor, carouselData.glassOpacity, carouselData.glassBorderRadius);
+
+        // Draw separator
+        if (carouselData.separator && carouselData.separator !== 'none' && textInfo) {
+            drawSeparator(ctx, carouselData.separator, textInfo, template.titleStyle, carouselData.separatorColor);
+        }
+
+        drawText(ctx, carouselData.content, subtitleStyle,
+            carouselData.contentSize, carouselData.contentFont,
+            false, false, carouselData.contentColor, carouselData.titleShadow, '', false, carouselData.contentWeight,
+            carouselData.lineHeight, carouselData.textIndent,
+            'none', carouselData.gradient, 'none');
+
+        // Draw page dots if enabled
+        if (carouselData.pageDots) {
+            drawPageDots(ctx, index + 1, state.carouselCount + 1);
+        }
+
+        // Draw swipe indicator if enabled
+        if (carouselData.swipeIndicator) {
+            drawSwipeIndicator(ctx, carouselData.swipeColor, carouselData.swipeSize, carouselData.swipeStyle);
+        }
+    } catch (error) {
+        console.error('Carousel preview update error:', error);
+        // Draw error message
+        ctx.fillStyle = '#f5f5f5';
+        ctx.fillRect(0, 0, 1080, 1350);
+        ctx.fillStyle = '#999';
+        ctx.font = '24px Montserrat';
+        ctx.textAlign = 'center';
+        ctx.fillText('Önizleme yüklenemedi', 540, 675);
+    }
+}
+
+// Toggle carousel preview visibility
+function toggleCarouselPreview(index) {
+    const container = document.getElementById(`carouselPreview${index}Container`);
+    if (container) {
+        container.classList.toggle('collapsed');
+    }
 }

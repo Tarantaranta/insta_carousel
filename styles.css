@@ -765,4 +765,121 @@ select {
     .template-grid {
         grid-template-columns: 1fr;
     }
+
+    .step3-container {
+        flex-direction: column;
+    }
+
+    .step3-form, .step3-preview {
+        width: 100%;
+    }
+
+    .step3-preview {
+        margin-top: 30px;
+    }
+}
+
+/* Live Preview Styles */
+.step3-container {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.step3-form {
+    flex: 1;
+    min-width: 0;
+}
+
+.step3-preview {
+    flex: 0 0 350px;
+    position: sticky;
+    top: 20px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.live-preview-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #667eea;
+}
+
+.live-preview-header h3 {
+    color: #667eea;
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.live-preview-canvas-container {
+    width: 100%;
+    background: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.live-preview-canvas-container canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Carousel Preview Styles */
+.carousel-preview-container {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.carousel-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.carousel-preview-header h4 {
+    color: #667eea;
+    font-size: 1.1em;
+    margin: 0;
+}
+
+.preview-toggle-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s;
+}
+
+.preview-toggle-btn:hover {
+    background: #5568d3;
+}
+
+.carousel-preview-canvas {
+    width: 100%;
+    background: #f5f5f5;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.carousel-preview-canvas.collapsed {
+    display: none;
+}
+
+.carousel-preview-canvas canvas {
+    width: 100%;
+    height: auto;
+    display: block;
 }

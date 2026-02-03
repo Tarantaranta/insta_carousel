@@ -76,6 +76,9 @@
         <div id="step3" class="step">
             <h2>Ana Ekran İçeriği</h2>
 
+            <div class="step3-container">
+                <div class="step3-form">
+
             <div class="form-group">
                 <label>Ana Ekran Görseli</label>
                 <div class="drop-zone" id="mainImageDrop">
@@ -327,6 +330,18 @@
                     </select>
                 </div>
             </div>
+
+                </div><!-- .step3-form -->
+
+                <div class="step3-preview">
+                    <div class="live-preview-header">
+                        <h3>Canlı Önizleme</h3>
+                    </div>
+                    <div class="live-preview-canvas-container">
+                        <canvas id="mainPreviewCanvas" width="1080" height="1350"></canvas>
+                    </div>
+                </div>
+            </div><!-- .step3-container -->
 
             <div class="navigation">
                 <button class="btn btn-secondary" onclick="goToStep2()">Geri</button>
