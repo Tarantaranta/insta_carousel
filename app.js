@@ -782,7 +782,8 @@ function createCarouselForms() {
                 <label>Başlık</label>
                 <textarea id="carousel${i}Title" placeholder="Başlık giriniz (Enter ile yeni satır)" rows="2">${carousel.title || ''}</textarea>
                 <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
-                    📝 **bold** *italik* ==vurgu== __altçizgi__ ++2:büyük++ --0.5:küçük++
+                    📝 **bold** *italik* ==vurgu== __altçizgi__ ++2:büyük++ --0.5:küçük++<br>
+                    🎯 Hizalama: &lt;&lt;left:sola&gt;&gt; &lt;&lt;center:orta&gt;&gt; &lt;&lt;right:sağa&gt;&gt;
                 </small>
             </div>
 
@@ -790,7 +791,8 @@ function createCarouselForms() {
                 <label>İçerik</label>
                 <textarea id="carousel${i}Content" placeholder="İçerik giriniz" rows="4">${carousel.content || ''}</textarea>
                 <small style="color: #666; font-size: 12px; display: block; margin-top: 5px;">
-                    📝 **bold** *italik* ==vurgu== __altçizgi__ ++2:büyük++ --0.5:küçük++
+                    📝 **bold** *italik* ==vurgu== __altçizgi__ ++2:büyük++ --0.5:küçük++<br>
+                    🎯 Hizalama: &lt;&lt;left:sola&gt;&gt; &lt;&lt;center:orta&gt;&gt; &lt;&lt;right:sağa&gt;&gt;
                 </small>
             </div>
 
@@ -986,6 +988,8 @@ function createCarouselForms() {
                         <option value="small" ${(carousel.swipeSize || 'medium') === 'small' ? 'selected' : ''}>Küçük</option>
                         <option value="medium" ${(carousel.swipeSize || 'medium') === 'medium' ? 'selected' : ''}>Orta</option>
                         <option value="large" ${(carousel.swipeSize || 'medium') === 'large' ? 'selected' : ''}>Büyük</option>
+                        <option value="xlarge" ${(carousel.swipeSize || 'medium') === 'xlarge' ? 'selected' : ''}>Ekstra Büyük</option>
+                        <option value="xxlarge" ${(carousel.swipeSize || 'medium') === 'xxlarge' ? 'selected' : ''}>Çok Büyük</option>
                     </select>
                 </div>
 
@@ -1602,6 +1606,35 @@ function parseStyledText(text) {
             if (underlineText) parts.push({ text: underlineText, underline: true });
             i += 2;
         }
+        // Check for << (alignment): <<left:text>> <<center:text>> <<right:text>>
+        else if (text[i] === '<' && text[i+1] === '<') {
+            if (current) {
+                parts.push({ text: current });
+                current = '';
+            }
+            i += 2;
+            let content = '';
+            while (i < text.length && !(text[i] === '>' && text[i+1] === '>')) {
+                content += text[i];
+                i++;
+            }
+
+            // Parse alignment: "left:text", "center:text", "right:text"
+            let alignment = 'left'; // default
+            let alignedText = content;
+
+            if (content.includes(':')) {
+                const colonIndex = content.indexOf(':');
+                const alignPart = content.substring(0, colonIndex).trim().toLowerCase();
+                if (alignPart === 'left' || alignPart === 'center' || alignPart === 'right') {
+                    alignment = alignPart;
+                    alignedText = content.substring(colonIndex + 1);
+                }
+            }
+
+            if (alignedText) parts.push({ text: alignedText, textAlign: alignment });
+            i += 2;
+        }
         else {
             current += text[i];
             i++;
@@ -1869,17 +1902,49 @@ function calculateStyledLineWidth(ctx, parts, fontSize, fontFamily) {
 function drawStyledLineParts(ctx, parts, x, y, fontSize, fontFamily, baseColor, shadow, textAlign) {
     const totalWidth = calculateStyledLineWidth(ctx, parts, fontSize, fontFamily);
 
+    // Check if any part has custom textAlign property
+    const hasCustomAlign = parts.some(part => part.textAlign);
+
     let currentX = x;
-    if (textAlign === 'center') {
-        currentX = x - totalWidth / 2;
-    } else if (textAlign === 'right') {
-        currentX = x - totalWidth;
+
+    // If no custom alignment in parts, use the global textAlign
+    if (!hasCustomAlign) {
+        if (textAlign === 'center') {
+            currentX = x - totalWidth / 2;
+        } else if (textAlign === 'right') {
+            currentX = x - totalWidth;
+        }
+    } else {
+        // Handle custom alignment for each part
+        // For now, treat the entire line as left-aligned base position
+        currentX = x;
+        if (textAlign === 'center') {
+            currentX = 540; // Center of canvas
+        } else if (textAlign === 'right') {
+            currentX = 1080 - 50; // Right side with padding
+        } else {
+            currentX = 50; // Left side with padding
+        }
     }
 
     const originalAlign = ctx.textAlign;
     ctx.textAlign = 'left'; // Draw parts left-aligned from calculated position
 
     parts.forEach(part => {
+        // If this part has custom alignment, override position
+        if (part.textAlign) {
+            if (part.textAlign === 'center') {
+                currentX = 540; // Center of canvas
+                ctx.textAlign = 'center';
+            } else if (part.textAlign === 'right') {
+                currentX = 1080 - 50; // Right side with padding
+                ctx.textAlign = 'right';
+            } else {
+                currentX = 50; // Left side with padding
+                ctx.textAlign = 'left';
+            }
+        }
+
         // Calculate font size for this part
         const partFontSize = part.sizeMultiplier ? fontSize * part.sizeMultiplier : fontSize;
 
@@ -1913,7 +1978,10 @@ function drawStyledLineParts(ctx, parts, x, y, fontSize, fontFamily, baseColor, 
             ctx.stroke();
         }
 
-        currentX += textWidth;
+        // Only increment currentX if no custom alignment (for continuous text flow)
+        if (!part.textAlign) {
+            currentX += textWidth;
+        }
     });
 
     ctx.textAlign = originalAlign;
@@ -2200,7 +2268,9 @@ function drawSwipeIndicator(ctx, color = '#FFFFFF', size = 'medium', style = 'ar
     const sizes = {
         small: { scale: 0.7, fontSize: 12, lineWidth: 2 },
         medium: { scale: 1, fontSize: 14, lineWidth: 3 },
-        large: { scale: 1.4, fontSize: 16, lineWidth: 4 }
+        large: { scale: 1.4, fontSize: 16, lineWidth: 4 },
+        xlarge: { scale: 1.8, fontSize: 20, lineWidth: 5 },
+        xxlarge: { scale: 2.2, fontSize: 24, lineWidth: 6 }
     };
     const sizeConfig = sizes[size] || sizes.medium;
 
@@ -2271,11 +2341,11 @@ function drawSwipeIndicator(ctx, color = '#FFFFFF', size = 'medium', style = 'ar
             break;
     }
 
-    // Text "Swipe"
+    // Text "Kaydır"
     ctx.font = `${sizeConfig.fontSize}px "Montserrat"`;
     ctx.fillStyle = colorWithLightOpacity;
     ctx.textAlign = 'center';
-    ctx.fillText('Swipe', centerX, centerY + 25 * sizeConfig.scale);
+    ctx.fillText('Kaydır', centerX, centerY + 25 * sizeConfig.scale);
 }
 
 function addPreviewItem(container, canvas, label, index) {
