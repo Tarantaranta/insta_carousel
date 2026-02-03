@@ -2020,12 +2020,16 @@ function drawStyledLineParts(ctx, parts, x, y, fontSize, fontFamily, baseColor, 
 
         // Draw underline if needed
         if (part.underline) {
-            const underlineY = y + partFontSize - 2;
+            // Position underline further below text with proper spacing
+            const underlineOffset = partFontSize * 0.12; // 12% below baseline
+            const underlineY = y + partFontSize + underlineOffset;
+
             ctx.beginPath();
             ctx.moveTo(currentX, underlineY);
             ctx.lineTo(currentX + textWidth, underlineY);
             ctx.strokeStyle = baseColor;
-            ctx.lineWidth = Math.max(1, partFontSize / 20);
+            // Thinner line for better appearance
+            ctx.lineWidth = Math.max(1, partFontSize / 25);
             ctx.stroke();
         }
 
