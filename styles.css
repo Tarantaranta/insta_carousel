@@ -815,7 +815,7 @@ select {
 
 .live-preview-canvas-container {
     width: 100%;
-    background: #f5f5f5;
+    background: transparent;
     border-radius: 8px;
     overflow: hidden;
     display: flex;
@@ -868,7 +868,7 @@ select {
 
 .carousel-preview-canvas {
     width: 100%;
-    background: #f5f5f5;
+    background: transparent;
     border-radius: 6px;
     overflow: hidden;
     margin-top: 10px;

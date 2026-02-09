@@ -2487,8 +2487,7 @@ async function updateMainPreview() {
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#f5f5f5';
-        ctx.fillRect(0, 0, 1080, 1350);
+        ctx.clearRect(0, 0, 1080, 1350);  // Şeffaf arka plan
         ctx.fillStyle = '#999';
         ctx.font = '24px Montserrat';
         ctx.textAlign = 'center';
@@ -2682,9 +2681,8 @@ async function updateCarouselPreview(index) {
             );
             ctx.globalAlpha = 1;
         } else {
-            // No background - draw placeholder
-            ctx.fillStyle = '#f0f0f0';
-            ctx.fillRect(0, 0, 1080, 1350);
+            // No background - transparent
+            ctx.clearRect(0, 0, 1080, 1350);
         }
 
         // Draw text
@@ -2727,9 +2725,8 @@ async function updateCarouselPreview(index) {
         }
     } catch (error) {
         console.error('Carousel preview update error:', error);
-        // Draw error message
-        ctx.fillStyle = '#f5f5f5';
-        ctx.fillRect(0, 0, 1080, 1350);
+        // Draw error message on transparent background
+        ctx.clearRect(0, 0, 1080, 1350);
         ctx.fillStyle = '#999';
         ctx.font = '24px Montserrat';
         ctx.textAlign = 'center';
